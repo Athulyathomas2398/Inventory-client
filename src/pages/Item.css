@@ -1,0 +1,46 @@
+.item-list-title {
+  margin-top: 40px;
+  font-size: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.item-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.item-table th,
+.item-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.item-table th {
+  background-color: #f3f4f6;
+  color: #333;
+}
+
+.item-table tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.item-table tr:hover {
+  background-color: #f1f5f9;
+}
+
+.edit-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #4338ca;
+}
