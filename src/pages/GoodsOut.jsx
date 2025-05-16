@@ -52,7 +52,7 @@ setItems(result.data)
         <label>Item</label>
         <input
           type="text"
-          placeholder="Enter item name"
+          placeholder="Enter item "
           value={form.item}
           onChange={(e) => setForm({ ...form, item: e.target.value })}
           required

@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import './GoodsIn.css'
 import { addStockApi } from '../services/allAPI';
+import { useNavigate } from 'react-router-dom';
 function GoodsIn() {
+  const navigate=useNavigate()
   const [items, setItems] = useState([]);
   const [form, setForm] = useState({
     entryNumber: '',
@@ -28,7 +30,7 @@ function GoodsIn() {
   
         if (result.status === 201) {
           alert("Data added successfully");
-          setItems(result.data)
+           setItems(result.data)
           setForm({ entryNumber: "", item: "", quantity: "", expiryDate: "" });
           navigate('/stock-report');
         }
