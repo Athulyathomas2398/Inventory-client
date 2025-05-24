@@ -14,8 +14,9 @@ function App() {
     <>
       <Header />
       
-      <Dashboard />
+      
       <Routes>
+         <Route path="/" element={<Dashboard /> } />
         <Route path="/item-master" element={<Item />} />
         <Route path="/goods-in" element={<GoodsIn />} />
         <Route path="/goods-out" element={<GoodsOut />} />

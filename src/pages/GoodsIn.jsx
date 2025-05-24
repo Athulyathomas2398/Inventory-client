@@ -1,45 +1,74 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './GoodsIn.css'
-import { addStockApi } from '../services/allAPI';
+import { addStockApi,  getAllApi,  getStockReportApi } from '../services/allAPI';
 import { useNavigate } from 'react-router-dom';
 function GoodsIn() {
   const navigate=useNavigate()
   const [items, setItems] = useState([]);
-  const [form, setForm] = useState({
-    entryNumber: '',
-    item: '',
-    quantity: '',
-    expiryDate: '',
-  });
+  // const [form, setForm] = useState({
+  //   entryNumber: '',
+  //   item: '',
+  //   itemName:'',
+  //   quantity: '',
+  //   expiryDate: '',
+  // });
+  const [form, setForm] = useState({item:'',itemName:'',quantity:'',expiryDate:''});
+
+  console.log("items in",items);
+  useEffect(() => {
+    fetchDatas()
+   
+  }, [])
+  
+    const fetchDatas=async()=>{
+      const result=await getAllApi()
+      console.log(result);
+      if(result.status==200){
+        setItems(result.data)
+      }
+    }
+
+ 
    const handleSubmit = async (e) => {
     e.preventDefault();
-    const { entryNumber, item, quantity, expiryDate } = form;
+    // const { entryNumber, item,itemName, quantity, expiryDate } = form;
+    const { item,itemName, quantity, expiryDate } = form;
 
-    if (entryNumber && item && quantity && expiryDate) {
+    if (! itemName || !quantity ) {
       
-      const reqBody = {
-        entryNumber,
-        item,
-        quantity,
-        expiryDate,
-      };
+      alert("Enter all fields");
+      return;
+    }
+    const reqBody = { item,itemName, quantity, expiryDate };
+
+      // const reqBody = {
+      //   entryNumber,
+      //   item,
+      //   itemName,
+      //   quantity,
+      //   expiryDate,
+      // };
   
       try {
         const result = await addStockApi(reqBody);
         console.log(result);
-  
+        if (result.status === 400) {
+          alert("duplicate entry");
+        } 
+
         if (result.status === 201) {
           alert("Data added successfully");
            setItems(result.data)
-          setForm({ entryNumber: "", item: "", quantity: "", expiryDate: "" });
+           setForm({item:"", itemName: "", quantity: "", expiryDate: "" });
+          // setForm({ entryNumber: "", item: "", quantity: "", expiryDate: "" });
           navigate('/stock-report');
         }
+      
       } catch (err) {
+         
         console.log("Error:", err);
       }
-    } else {
-      alert("Enter all fields");
-    }
+    
   };
   return (
     <>
@@ -47,36 +76,60 @@ function GoodsIn() {
       <h2 className="goodsin-title">Add Goods In Entry</h2>
       <form className="goodsin-form" onSubmit={handleSubmit}  >
         {/* */}
-        <label>Entry Number</label>
+                {/* <label>Select Item</label>
+<select
+  value={form.entryNumber || ''}
+  onChange={(e) => setForm({ ...form, entryNumber: e.target.value })}
+  required
+>
+  <option value="">Select Entry Number</option>
+  {items.map((item) => (
+    <option key={item._id} value={item._id}>
+      {item.entryNumber} 
+    </option>
+  ))}
+</select> */}
+        {/* <label>Entry Number</label>
         <input
           type="text"
           placeholder="Enter entry number"
           value={form.entryNumber}
           onChange={(e) => setForm({ ...form, entryNumber: e.target.value })}
           required
-        />
+        /> */}
 
- <label>item</label>
+ {/* <label>item</label>
         <input
           type="text"
           placeholder="Enter item"
           value={form.item}
           onChange={(e) => setForm({ ...form, item: e.target.value })}
           required
-        />
-        {/* <label>Select Item</label>
-        <select
-          value={form.item}
-          onChange={(e) => setForm({ ...form, item: e.target.value })}
+        /> */}
+
+        {/* <label>item Name</label>
+        <input
+          type="text"
+          placeholder="Enter item name"
+          value={form.itemName}
+          onChange={(e) => setForm({ ...form, itemName: e.target.value })}
           required
-        >
-          <option value="">Select an item</option>
-          {items.map((item) => (
-            <option key={item._id} value={item._id}>
-              {item.itemName}
-            </option>
-          ))}
-        </select> */}
+        /> */}
+ <label>Select Item</label>
+<select
+  value={form.itemName}
+  onChange={(e) => setForm({ ...form, itemName: e.target.value })}
+  required
+>
+  <option value="">Select an item</option>
+  {items.map(item => (
+    console.log("select",item),
+    <option key={item._id} value={item.itemName}>
+      {item.itemName}
+    </option>
+  ))}
+</select>
+
 
         <label>Quantity</label>
         <input
@@ -92,7 +145,7 @@ function GoodsIn() {
           type="date"
           value={form.expiryDate}
           onChange={(e) => setForm({ ...form, expiryDate: e.target.value })}
-          required
+          
         />
 
         <button className="submit-btn" type="submit">Add Stock</button>
